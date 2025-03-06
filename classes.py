@@ -1,20 +1,38 @@
 # Classes
 class Transportadora:
-    def __init__(self, nome, emissao_co2):
+    def __init__(self, nome, emissao_co2_por_km, eletrica=False, perda_produtos=0):
         self.nome = nome
-        self.emissao_co2 = emissao_co2  # Escala de 1 a 5
+        self.emissao_co2_por_km = emissao_co2_por_km  
+        self.eletrica = eletrica  
+        self.perda_produtos = perda_produtos 
 
 class Produtor:
-    def __init__(self, nome, poluicao_producao):
+    def __init__(self, nome, consumo_kwh_por_10_produtos, consumo_diario_kwh, distancia_km):
         self.nome = nome
-        self.poluicao_producao = poluicao_producao  # Escala de 1 a 5
+        self.consumo_kwh_por_10_produtos = consumo_kwh_por_10_produtos
+        self.consumo_diario_kwh = consumo_diario_kwh
+        self.distancia_km = distancia_km
+
+    def calcular_recursos_producao(self, quantidade):
+        kwh_producao = (quantidade / 10) * self.consumo_kwh_por_10_produtos
+        return kwh_producao + self.consumo_diario_kwh
 
 class Produto:
-    def __init__(self, nome, produtor, transportadora):
+    def __init__(self, nome, produtor, transportadora, quantidade=10):
         self.nome = nome
         self.produtor = produtor
         self.transportadora = transportadora
-        self.custo_poluicao = produtor.poluicao_producao + transportadora.emissao_co2  # Escala de 2 a 10
+        self.quantidade = quantidade
+        
+        self.custo_poluicao = self.calcular_poluicao()
+
+    def calcular_poluicao(self):
+        poluicao_producao = self.produtor.calcular_recursos_producao(self.quantidade)
+        poluicao_transporte = 0 if self.transportadora.eletrica else self.produtor.distancia_km * self.transportadora.emissao_co2_por_km
+        return poluicao_producao + poluicao_transporte
+
+    def calcular_perda_transporte(self):
+        return self.quantidade * self.transportadora.perda_produtos
 
 class Consumidor:
     def __init__(self, nome):
@@ -23,17 +41,17 @@ class Consumidor:
     
     def calcular_poluicao_total(self):
         return sum(produto.custo_poluicao for produto in self.produtos_selecionados)
-    
-# Dados fictícios
+
+
 transportadoras = [
-    Transportadora("EcoTrans", 2),
-    Transportadora("FastDelivery", 4)
+    Transportadora("EcoTrans", 0, eletrica=True, perda_produtos=0.2), 
+    Transportadora("FastDelivery", 738, eletrica=False)  
 ]
 
 produtores = [
-    Produtor("Fazenda Verde", 2),
-    Produtor("AgroVida", 3),
-    Produtor("EcoFrutas", 4)
+    Produtor("Fazenda Verde", 1, 2, 100),
+    Produtor("AgroVida", 3, 2, 70),
+    Produtor("EcoFrutas", 2, 1, 150)
 ]
 
 produtos = [
@@ -47,4 +65,3 @@ produtos = [
     Produto("Banana", produtores[1], transportadoras[1]),
     Produto("Banana", produtores[2], transportadoras[0]),
 ]
-
