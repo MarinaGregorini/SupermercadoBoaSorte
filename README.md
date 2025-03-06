@@ -1,50 +1,76 @@
-# Jogo da Forca em Python
+# Flask Site de Compras Sustentáveis
 
-Este é um jogo da forca em Python, onde o objetivo é adivinhar uma palavra antes de cometer 6 erros.
+Este projeto é um site desenvolvido com Flask que permite selecionar produtos, produtores e transportadoras, calculando o impacto ambiental de cada compra.
 
-## Como Funciona
+## Estrutura do Projeto
 
-- O jogo escolhe uma palavra aleatória de uma lista.
-- O jogador tenta adivinhar a palavra, uma letra por vez.
-- A cada erro, uma parte da forca é desenhada.
-- O jogador perde se errar 6 vezes ou ganha se adivinhar a palavra.
+```
+/ (Raiz do projeto)
+│-- app.py            # Código principal do Flask
+│-- classes.py        # Definição das classes do sistema
+│-- templates/
+│   │-- login.html    # Página de login
+│   │-- produtos.html # Página de escolha de produtos
+│   │-- resumo.html   # Página de resumo da compra
+│-- static/           # Arquivos estáticos (CSS, JS, imagens)
+│-- requirements.txt  # Dependências do projeto
+│-- README.md         # Este arquivo
+```
 
-## Explicação do Código
+## Classes (classes.py)
 
-### Funções
+- **Consumidor**
+  - Atributos: `nome`, `produtos_selecionados`
+  - Métodos: `calcular_valor_total()`
+- **Transportadora**
+  - Atributos: `nome`, `emissao`
+- **Produtor**
+  - Atributos: `nome`, `custo_pol`
+- **Produto**
+  - Atributos: `nome`, `custo_pol_total`
+  - Método: `calcular_custo_pol(produtor, transporte)`
 
-- **`escolher_palavra()`**:  
-  Esta função escolhe uma palavra aleatória a partir de uma lista de palavras pré-definidas. A palavra é retornada para ser utilizada no jogo.
+## Arquivo Principal (app.py)
 
-- **`imprimir_palavra(letras_palavra, impressao_passada, input_letra)`**:  
-  Exibe a palavra com as letras descobertas e as letras ainda ocultas (representadas por "_"). A função recebe a lista `letras_palavra`, a lista `impressao_passada` e a letra escolhida pelo jogador na rodada atual.
+### Variáveis
+- `transportadoras` → Lista de transportadoras
+- `produtores` → Lista de produtores
+- `produtos` → Lista de produtos
+- `carrinho` → Lista de compras feitas pelo usuário
 
-- **`desenhar_forca(tentativas)`**:  
-  Desenha a forca com base no número de tentativas erradas feitas pelo jogador. A cada erro, o desenho da forca é atualizado, com até 6 erros permitidos antes do jogador perder.
+### Rotas
+- `/` → Página de login
+- `/produtos` → Página para escolha de produtos
+- `/resumo` → Página com o resumo da compra
 
-## Variáveis
+## Dependências (requirements.txt)
 
-- **`palavra_aleatoria`**:  
-  Armazena a palavra escolhida aleatoriamente pela função `escolher_palavra()`. Essa palavra é o objetivo que o jogador deve adivinhar.
+O projeto requer a instalação das seguintes bibliotecas:
 
-- **`letras_palavra`**:  
-  Uma lista que contém as letras da palavra secreta.
+```
+Flask
+```
 
-- **`input_letra`**:  
-  Letra escolhida pelo jogador na rodada atual.
+Instale com:
+```sh
+pip install -r requirements.txt
+```
 
-- **`acertou`**:  
-  Recebe `True` ou `False` a depender se a letra escolhida está contida na palavra secreta.
+## Como Executar
 
-- **`impressao_passada`**:  
-  Contém as letras corretas escolhidas nas rodadas anteriores na posição devida e "_" para as letras ainda não adivinhadas.
+1. Criar ambiente virtual (opcional, mas recomendado):
+   ```sh
+   python3 -m venv venv
+   source venv/bin/activate  # No macOS/Linux
+   venv\Scripts\activate  # No Windows
+   ```
+2. Instalar dependências:
+   ```sh
+   pip install -r requirements.txt
+   ```
+3. Rodar a aplicação:
+   ```sh
+   python app.py
+   ```
+4. Acessar no navegador: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
-- **`tentativas`**:  
-  Um contador que armazena o número de tentativas erradas feitas pelo jogador. Se o número de tentativas erradas chegar a 6, o jogador perde.
-
-## Como Jogar
-
-1. Execute o código com `jogo_da_forca.py`
-2. O jogo vai exibir uma palavra mascarada, e você deve digitar uma letra de cada vez.
-3. Se acertar uma letra, ela será revelada. Se errar, a forca vai sendo desenhada.
-4. O jogo termina quando você adivinhar a palavra ou cometer 6 erros.
