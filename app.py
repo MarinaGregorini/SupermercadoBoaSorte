@@ -15,16 +15,23 @@ def login():
         return redirect(url_for('escolher_produtos'))
     return render_template('login.html')
 
+
 @app.route('/escolher_produtos', methods=['GET', 'POST'])
 def escolher_produtos():
+    frutas = list(set(p.nome for p in produtos))  # Remove duplicatas
+
+    produtos_por_fruta = {fruta: [p for p in produtos if p.nome == fruta] for fruta in frutas}
+
     if request.method == 'POST':
-        selecionados = request.form.getlist('produtos')
-        for nome_produto in selecionados:
-            produto = next((p for p in produtos if p.nome == nome_produto), None)
-            if produto:
-                consumidor.produtos_selecionados.append(produto)
+        for fruta in frutas:
+            produto_selecionado = request.form.get(f'produto_{fruta}')
+            if produto_selecionado:
+                produto = next((p for p in produtos if p.nome == produto_selecionado), None)
+                if produto:
+                    consumidor.produtos_selecionados.append(produto)
         return redirect(url_for('resumo_compra'))
-    return render_template('escolher_produtos.html', produtos=produtos)
+
+    return render_template('escolher_produtos.html', produtos_por_fruta=produtos_por_fruta)
 
 @app.route('/resumo_compra')
 def resumo_compra():
