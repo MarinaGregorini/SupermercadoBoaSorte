@@ -12,6 +12,7 @@ class Produtor:
         self.consumo_diario = consumo_diario
         self.distancia_km = distancia_km
         self.dias_armazenado = dias_armazenado
+
 class Produto:
     def __init__(self, nome, produtor, transportadora):
         self.nome = nome
@@ -23,29 +24,40 @@ class Produto:
         self.custo_poluicao = self.poluicao_producao + self.poluicao_transporte
         
     def calcular_poluicao_producao(self):
-        
         poluicao_producao = self.produtor.consumo_produto + (self.produtor.dias_armazenado * self.produtor.consumo_diario)
-        if poluicao_producao <= 2:
+        
+        if poluicao_producao <= 1.5:
+            poluicao_producao_rank = 0
+        elif poluicao_producao <= 3:
             poluicao_producao_rank = 1
-        elif poluicao_producao > 2:
+        elif poluicao_producao <= 5:
             poluicao_producao_rank = 2
-        else:
+        elif poluicao_producao <= 7:
             poluicao_producao_rank = 3
+        elif poluicao_producao <= 9:
+            poluicao_producao_rank = 4
+        else:
+            poluicao_producao_rank = 5
             
         return poluicao_producao_rank
     
     def calcular_poluicao_transporte(self):
-        
         poluicao_transporte = 0 if self.transportadora.eletrica else self.produtor.distancia_km * self.transportadora.co2_km
-        if poluicao_transporte < 52000:
-            poluicao_transporte_rank = 1
-        elif poluicao_transporte > 52000 and poluicao_transporte < 74000:
-            poluicao_transporte_rank = 2
-        else:
-            poluicao_transporte_rank = 3
-            
-        return  poluicao_transporte_rank
         
+        if poluicao_transporte == 0:
+            poluicao_transporte_rank = 0
+        elif poluicao_transporte < 50000:
+            poluicao_transporte_rank = 1
+        elif poluicao_transporte < 60000:
+            poluicao_transporte_rank = 2
+        elif poluicao_transporte < 70000:
+            poluicao_transporte_rank = 3
+        elif poluicao_transporte < 80000:
+            poluicao_transporte_rank = 4
+        else:
+            poluicao_transporte_rank = 5
+            
+        return poluicao_transporte_rank
 
 class Consumidor:
     def __init__(self, nome):
@@ -57,16 +69,17 @@ class Consumidor:
 
 
 transportadoras = [
-    Transportadora("EcoTrans", 0, eletrica=True), 
-    Transportadora("FastDelivery", 738)  
+    Transportadora("EcoTrans", 0, eletrica=True),  
+    Transportadora("FastDelivery", 738) 
 ]
 
 produtores = [
-    Produtor("Fazenda Verde", 2.1, 0.2, 100, 3),
-    Produtor("AgroVida", 1.5, 0.2, 70, 4),
-    Produtor("EcoFrutas", 1.8, 0.1, 150, 2)
+    Produtor("Fazenda Verde", 2.5, 0.5, 120, 5), 
+    Produtor("AgroVida", 4.0, 0.3, 80, 2),  
+    Produtor("EcoFrutas", 1.2, 0.7, 200, 8)  
 ]
 
+# Produtos
 produtos = [
     Produto("Maçã", produtores[0], transportadoras[0]),
     Produto("Maçã", produtores[1], transportadoras[1]),
