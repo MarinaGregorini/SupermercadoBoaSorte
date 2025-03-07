@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Escolha de Produtos</title>
+</head>
+
+<body>
+    <h2>Escolha seus produtos</h2>
+    <form method="post">
+        {% for produto in produtos %}
+        <input type="checkbox" name="produtos" value="{{ produto.nome }}">
+        {{ produto.nome }} - Poluição Produção: {{ produto.poluicao_producao }} - Transporte: {{
+        produto.poluicao_transporte }} - Total: {{ produto.custo_poluicao }}<br>
+        {% endfor %}
+        <button type="submit">Finalizar Compra</button>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Resumo da Compra</title>
+</head>
+
+<body>
+    <h2>Resumo da Compra</h2>
+    <p>Nome: {{ consumidor.nome }}</p>
+    <ul>
+        {% for produto in consumidor.produtos_selecionados %}
+        <li>{{ produto.nome }} - Poluição Total: {{ produto.custo_poluicao }}</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Poluição Total da Compra:</strong> {{ total_poluicao }}</p>
+</body>
+
+</html>
