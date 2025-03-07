@@ -62,7 +62,11 @@
         <h4>Consumidor: {{ consumidor.nome }}</h4>
         <ul>
             {% for produto in consumidor.produtos_selecionados %}
-            <li>{{ produto.nome }} - Impacto Ambiental: {{ produto.custo_poluicao }}</li>
+            <li>{{ produto.nome }}:
+                <br> - Impacto Ambiental de Produção: {{ produto.poluicao_producao }}
+                <br> - Impacto Ambiental de Transporte: {{ produto.poluicao_transporte }}
+                <br> - Impacto Ambiental Total: {{ produto.custo_poluicao }}
+            </li>
             {% endfor %}
         </ul>
 
