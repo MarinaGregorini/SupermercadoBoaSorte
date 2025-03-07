@@ -31,7 +31,7 @@ def escolher_produtos():
             if produto_selecionado:
                 produto = next((p for p in produtos if p.nome == produto_selecionado), None)
                 if produto:
-                    consumidor.produtos_selecionados.append(produto)
+                    consumidor.produto_selecionados.append(produto)
         return redirect(url_for('resumo_compra'))
 
     return render_template('escolher_produtos.html', produtos_por_fruta=produtos_por_fruta)
