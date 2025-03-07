@@ -18,6 +18,9 @@ def login():
 
 @app.route('/escolher_produtos', methods=['GET', 'POST'])
 def escolher_produtos():
+    global consumidor
+    if consumidor is None:
+        return redirect(url_for('login'))
     # Gera a lista de frutas a partir dos produtos disponíveis
     frutas = list(set(p.nome for p in produtos))  # Remove duplicatas
 
