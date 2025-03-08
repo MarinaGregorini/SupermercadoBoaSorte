@@ -19,10 +19,16 @@ def login():
 @app.route('/escolher_produtos', methods=['GET', 'POST'])
 def escolher_produtos():
     # Gera a lista de frutas a partir dos produtos disponíveis
-    frutas = list(set(p.nome for p in produtos))  # Remove duplicatas
+    frutas = list(set(p.nome.split()[0] for p in produtos))  # Extrai apenas "Maçã", "Banana", etc.
 
     # Agrupa os produtos por nome de fruta
-    produtos_por_fruta = {fruta: [p for p in produtos if p.nome == fruta] for fruta in frutas}
+    produtos_por_fruta = {fruta: [p for p in produtos if p.nome.split()[0] == fruta] for fruta in frutas}
+
+    # Encontra o produto recomendado (menor custo de poluição) para cada fruta
+    produto_recomendado_por_fruta = {
+        fruta: min(fornecedores, key=lambda p: p.custo_poluicao)
+        for fruta, fornecedores in produtos_por_fruta.items()
+    }
 
     if request.method == 'POST':
         # Seleção dos produtos de cada fruta
@@ -34,12 +40,18 @@ def escolher_produtos():
                     consumidor.produtos_selecionados.append(produto)
         return redirect(url_for('resumo_compra'))
 
-    return render_template('escolher_produtos.html', produtos_por_fruta=produtos_por_fruta)
+    return render_template(
+        'escolher_produtos.html',
+        produtos_por_fruta=produtos_por_fruta,
+        produto_recomendado_por_fruta=produto_recomendado_por_fruta
+    )
+
 
 @app.route('/resumo_compra')
 def resumo_compra():
     total_poluicao = consumidor.calcular_poluicao_total()
     return render_template('resumo_compra.html', consumidor=consumidor, total_poluicao=total_poluicao)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

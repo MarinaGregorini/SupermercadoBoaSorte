@@ -12,6 +12,7 @@ class Produtor:
         self.consumo_diario = consumo_diario
         self.distancia_km = distancia_km
         self.dias_armazenado = dias_armazenado
+
 class Produto:
     def __init__(self, nome, produtor, transportadora):
         self.nome = nome
@@ -23,7 +24,6 @@ class Produto:
         self.custo_poluicao = self.poluicao_producao + self.poluicao_transporte
         
     def calcular_poluicao_producao(self):
-        
         poluicao_producao = self.produtor.consumo_produto + (self.produtor.dias_armazenado * self.produtor.consumo_diario)
         if poluicao_producao <= 2:
             poluicao_producao_rank = 1
@@ -31,11 +31,9 @@ class Produto:
             poluicao_producao_rank = 2
         else:
             poluicao_producao_rank = 3
-            
         return poluicao_producao_rank
     
     def calcular_poluicao_transporte(self):
-        
         poluicao_transporte = 0 if self.transportadora.eletrica else self.produtor.distancia_km * self.transportadora.co2_km
         if poluicao_transporte < 52000:
             poluicao_transporte_rank = 1
@@ -43,9 +41,8 @@ class Produto:
             poluicao_transporte_rank = 2
         else:
             poluicao_transporte_rank = 3
-            
-        return  poluicao_transporte_rank
-        
+        return poluicao_transporte_rank
+
 
 class Consumidor:
     def __init__(self, nome):
@@ -56,6 +53,7 @@ class Consumidor:
         return sum(produto.custo_poluicao for produto in self.produtos_selecionados)
 
 
+# Dados
 transportadoras = [
     Transportadora("EcoTrans", 0, eletrica=True), 
     Transportadora("FastDelivery", 738)  
@@ -68,13 +66,13 @@ produtores = [
 ]
 
 produtos = [
-    Produto("Maçã", produtores[0], transportadoras[0]),
-    Produto("Maçã", produtores[1], transportadoras[1]),
-    Produto("Maçã", produtores[2], transportadoras[0]),
-    Produto("Laranja", produtores[0], transportadoras[1]),
-    Produto("Laranja", produtores[1], transportadoras[0]),
-    Produto("Laranja", produtores[2], transportadoras[1]),
-    Produto("Banana", produtores[0], transportadoras[0]),
-    Produto("Banana", produtores[1], transportadoras[1]),
-    Produto("Banana", produtores[2], transportadoras[0]),
+    Produto("Maçã A", produtores[0], transportadoras[0]),
+    Produto("Maçã B", produtores[1], transportadoras[1]),
+    Produto("Maçã C", produtores[2], transportadoras[0]),
+    Produto("Laranja A", produtores[0], transportadoras[1]),
+    Produto("Laranja B", produtores[1], transportadoras[0]),
+    Produto("Laranja C", produtores[2], transportadoras[1]),
+    Produto("Banana A", produtores[0], transportadoras[0]),
+    Produto("Banana B", produtores[1], transportadoras[1]),
+    Produto("Banana C", produtores[2], transportadoras[0]),
 ]
