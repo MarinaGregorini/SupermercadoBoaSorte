@@ -1,92 +1,60 @@
-<!DOCTYPE html>
-<html lang="pt-pt">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escolher Produtos | Supermercado Boa Sorte</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
-</head>
+{% block title %}Escolher Produtos | Supermercado Boa Sorte{% endblock %}
 
-<body>
-    <div class="container">
-        <h1>Escolha os Produtos do Supermercado Boa Sorte</h1>
-        <form method="POST">
+{% block content %}
+<h2>Produtos Disponíveis</h2>
+<form method="POST">
+    <div class="row">
+        {% for fruta, fornecedores in produtos_por_fruta.items() %}
+        <div class="col-12">
+            <h4>{{ fruta }} ({{ fornecedores|length }} opções)</h4>
             <div class="row">
-                {% for fruta, fornecedores in produtos_por_fruta.items() %}
-                <div class="col-12">
-                    <h4>{{ fruta }} ({{ fornecedores|length }} opções)</h4>
-                    <div class="row">
-                        {% for produto in fornecedores %}
-                        <div class="col-md-4">
-                            <div class="card product-card">
-                                {% if produto == produto_recomendado_por_fruta[fruta] %}
-                                <div class="selo-recomendacao">Recomendado</div>
-                                {% endif %}
-                                {% if fruta == 'Maçã' %}
-                                <img src="https://prd360hyper-17e49.kxcdn.com/images/thumbs/6884660_maca-fuji-7580-kg.jpeg" class="produto-img card-img-top" alt="{{ produto.nome }}">
-                                {% elif fruta == 'Banana' %}
-                                <img src="https://mariadopomar.com/cdn/shop/products/BananaMadeira_672x480.jpg" class="produto-img card-img-top" alt="{{ produto.nome }}">
-                                {% elif fruta == 'Laranja' %}
-                                <img src="https://www.fruitsmith.com/pub/media/catalog/product/cache/121e3c4dcffca7e7d42866fdac9b02cf/n/a/navel_orange.png" class="produto-img card-img-top" alt="{{ produto.nome }}">
-                                {% endif %}
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ produto.nome }}</h5>
-                                    <p><strong>Produtor:</strong> {{ produto.produtor.nome }}</p>
+                {% for produto in fornecedores %}
+                <div class="col-md-4">
+                    <div class="card product-card">
+                        {% if produto == produto_recomendado_por_fruta[fruta] %}
+                        <div class="selo-recomendacao">Recomendado</div>
+                        {% endif %}
+                        {% if fruta == 'Maçã' %}
+                        <img src="https://prd360hyper-17e49.kxcdn.com/images/thumbs/6884660_maca-fuji-7580-kg.jpeg"
+                            class="produto-img card-img-top" alt="{{ produto.nome }}">
+                        {% elif fruta == 'Banana' %}
+                        <img src="https://mariadopomar.com/cdn/shop/products/BananaMadeira_672x480.jpg"
+                            class="produto-img card-img-top" alt="{{ produto.nome }}">
+                        {% elif fruta == 'Laranja' %}
+                        <img src="https://www.fruitsmith.com/pub/media/catalog/product/cache/121e3c4dcffca7e7d42866fdac9b02cf/n/a/navel_orange.png"
+                            class="produto-img card-img-top" alt="{{ produto.nome }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ produto.nome }}</h5>
+                            <p><strong>Produtor:</strong> {{ produto.produtor.nome }}</p>
+                            <p><strong>Transportadora:</strong> {{ produto.transportadora.nome }}</p>
 
-                                    <div class="explicacao-impacto">
-                                        <p>
-                                            Transportado por <strong>{{ produto.transportadora.nome }}</strong>
-                                            ({% if produto.transportadora.eletrica %}veículos elétricos{% else %}combustíveis fósseis{% endif %}),
-                                            emitiu <strong>{{ produto.poluicao_transporte }}g de CO₂</strong> ao percorrer {{ produto.produtor.distancia_km }} km.
-                                            <br>
-                                            Armazenado por <strong>{{ produto.produtor.dias_armazenado }} dias</strong>,
-                                            gerou <strong>{{ produto.poluicao_producao }}g de CO₂</strong> em custos energéticos.
-                                        </p>
-                                    </div>
-
-                                    <p class="impacto-ambiental">
-                                        <strong>Total de Emissões:</strong>
-                                        <span class="valor-co2">{{ produto.custo_poluicao }}g de CO₂</span>
-                                    </p>
-
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="produto_{{ fruta }}" value="{{ produto.nome }}" id="produto_{{ fruta }}_{{ loop.index }}">
-                                        <label class="form-check-label" for="produto_{{ fruta }}_{{ loop.index }}">
-                                            Selecionar
-                                        </label>
-                                    </div>
-
-                                    <div class="quantidade-kg">
-                                        <label for="kg_{{ fruta }}_{{ loop.index }}">Quantidade (kg):</label>
-                                        <input type="number" id="kg_{{ fruta }}_{{ loop.index }}" name="kg_{{ fruta }}_{{ loop.index }}" min="0" value="0" style="width: 80px;">
-                                    </div>
-                                </div>
+                            <p class="impacto-ambiental">
+                                <strong>Impacto Ambiental Total:</strong>
+                                <span class="valor-co2">{{ produto.custo_poluicao }}</span>
+                            </p>
+                            <div class="quantidade">
+                                <label for="quantidade">Quantidade:</label>
+                                <input type="number" id="quantidade_{{ produto.nome }}"
+                                    name="quantidade_{{ produto.nome }}" min="0" value="0" style="width: 80px;">
                             </div>
+
                         </div>
-                        {% endfor %}
                     </div>
-                    <!-- Adiciona espaço entre as categorias de frutas -->
-                    {% if not loop.last %}
-                    <div style="margin-bottom: 40px;"></div>
-                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
-            <button type="submit" class="btn btn-custom w-100">Finalizar Escolha</button>
-        </form>
-
-        <a href="{{ url_for('resumo_compra') }}" class="btn btn-custom-link">Ir para o Resumo da Compra</a>
+            {% if not loop.last %}
+            <div style="margin-bottom: 40px;"></div>
+            {% endif %}
+        </div>
+        {% endfor %}
     </div>
+    <button type="submit" class="btn btn-custom w-100">Finalizar Escolha</button>
+</form>
 
-    <div class="footer">
-        <p>&copy; 2025 Supermercado Boa Sorte - Todos os direitos reservados</p>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-</body>
-
-</html>
+<a href="{{ url_for('resumo_compra') }}" class="btn btn-custom-link">Ir para o Resumo da Compra</a>
+<br><br><br>
+{% endblock %}
