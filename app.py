@@ -21,30 +21,34 @@ def login():
 
 @app.route('/escolher_produtos', methods=['GET', 'POST'])
 def escolher_produtos():
+    
     frutas = list(set(p.nome.split()[0] for p in produtos))
     produtos_por_fruta = {fruta: [p for p in produtos if p.nome.split()[0] == fruta] for fruta in frutas}
+    
     produto_recomendado_por_fruta = {
         fruta: min(fornecedores, key=lambda p: p.custo_poluicao)
         for fruta, fornecedores in produtos_por_fruta.items()
     }
 
     if request.method == 'POST':
-
+        
+        consumidor.produtos_selecionados.clear()
+        
         for fruta, fornecedores in produtos_por_fruta.items():
             
             for produto in fornecedores:
                 
                 quantidade = request.form.get(f'quantidade_{produto.nome}', 0)
-                quantidade = int(quantidade)# Converte para inteiro
+                quantidade = int(quantidade) 
 
                 if quantidade > 0:
-                    for _ in range(quantidade):
-                        consumidor.produtos_selecionados.append(produto)     
-                        
+                    consumidor.adicionar_produto(produto, quantidade)
+        
         return redirect(url_for('resumo_compra'))
-
-    return render_template('escolher_produtos.html', produtos_por_fruta=produtos_por_fruta, produto_recomendado_por_fruta=produto_recomendado_por_fruta)
-
+    
+    return render_template(
+        'escolher_produtos.html', produtos_por_fruta=produtos_por_fruta, produto_recomendado_por_fruta=produto_recomendado_por_fruta
+        )
 
 @app.route('/resumo_compra')
 def resumo_compra():

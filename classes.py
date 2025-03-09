@@ -63,13 +63,20 @@ class Produto:
 class Consumidor:
     
     def __init__(self, nome):
-        
         self.nome = nome
-        self.produtos_selecionados = []
+        self.produtos_selecionados = {} 
+    
+    def adicionar_produto(self, produto, quantidade):
+        
+        if produto in self.produtos_selecionados:
+            self.produtos_selecionados[produto] += quantidade
+            
+        else:
+            self.produtos_selecionados[produto] = quantidade
     
     def calcular_poluicao_total(self):
-        soma = sum(produto.custo_poluicao for produto in self.produtos_selecionados)
-        return soma
+        
+        return sum(produto.custo_poluicao * quantidade for produto, quantidade in self.produtos_selecionados.items())
 
 transportadoras = [
     Transportadora("EcoTrans", 0, eletrica=True), 

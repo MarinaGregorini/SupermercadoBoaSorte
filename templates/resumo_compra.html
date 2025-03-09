@@ -5,9 +5,9 @@
 <h2>Resumo da Compra</h2>
 <h4>Consumidor: {{ consumidor.nome }}</h4>
 <ul>
-    {% for produto in consumidor.produtos_selecionados %}
+    {% for produto, quantidade in consumidor.produtos_selecionados.items() %}
     <li>
-        {{ produto.nome }} - Impacto Ambiental: {{ produto.custo_poluicao }}
+        {{ produto.nome }} - Quantidade: {{ quantidade }} - Impacto Ambiental: {{ produto.custo_poluicao * quantidade }}
     </li>
     <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#modal_{{ loop.index }}">
         Saiba Mais
