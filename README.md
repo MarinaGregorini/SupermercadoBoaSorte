@@ -65,33 +65,34 @@ http://127.0.0.1:5000/
 
 ### classes.py
 - **Classes:**
-  - `Transportadora`: Define as empresas de transporte
-    Recebe os seguintes parâmetros:
-    - `nome`
-    - `co2_km` representa a emissão de co2 por km do veículo
-    - `eletrica` define se o veículo é elétrico
+  - `Transportadora`: Define as empresas de transporte.
+    - Recebe os seguintes parâmetros:
+      - `nome`
+      - `co2_km` representa a emissão de co2 por km do veículo
+      - `eletrica` define se o veículo é elétrico
 
-  - `Produtor`: Representa os fornecedores de produtos
-    Recebe os seguintes parâmetros:
-    - `nome`
-    - `consumo_produto` define quantos kWh são gastos para produzir cada produto
-    - `consumo_diario` define os gastos em kWh que o produtor gasta por dia para manter os seus produtos armazenados
-    - `distancia_km` define a distância entre o produtor e o supermercado 
-    - `dias_armazenado` define quantos dias o produtor mantem os seus produtos armazenados antes de os enviar
+  - `Produtor`: Representa os fornecedores de produtos.
+    - Recebe os seguintes parâmetros:
+      - `nome`
+      - `consumo_produto` define quantos kWh são gastos para produzir cada produto
+      - `consumo_diario` define os gastos em kWh que o produtor gasta por dia para manter os seus produtos armazenados
+      - `distancia_km` define a distância entre o produtor e o supermercado 
+      - `dias_armazenado` define quantos dias o produtor mantem os seus produtos armazenados antes de os enviar
 
-  - `Produto`: Representa um produto
-    Recebe os seguintes parâmetros:
-    - `nome`
-    - `produtor`
-    - `transportadora`
+  - `Produto`: Representa um produto.
+    - Recebe os seguintes parâmetros:
+      - `nome`
+      - `produtor`
+      - `transportadora`
   
-  O método `calcular_poluicao_producao()` calcula o impacto ambiental da produção através do somatório dos gastos energéticos do consumo diário do armazenamento multiplicados pelos dias armazenados com o gasto energético da produção do produto. 
+  O método `calcular_poluicao_producao()` calcula o impacto ambiental da produção através do somatório dos gastos energéticos do consumo diário do armazenamento, multiplicados pelos dias armazenados, com o gasto energético da produção do produto. 
   Esta dimensão do impacto ambiental é então colocado num ranking que vai de 1 a 3, de acordo com o total de kWh.
 
   O método `calcular_poluicao_transporte()` multiplica a distância em km pela emissão de co2 por km. 
   Esta dimensão do impacto ambiental é também colocado num ranking, de 0 a 3, onde os veículos elétricos, que não emitem co2, são equivalentes a 0. Os restantes são dividos de acordo com o total de emissões de CO2.
 
-  - `Consumidor`: Define o consumidor e recebe o parâmetro `nome`.
+  - `Consumidor`: Define o consumidor.
+    - Recebe o parâmetro `nome`.
   Inicializa e popula o dicionário `produtos_selecionados` com a função `adicionar_produto(produto, quantidade)`.
   Calcula o impacto ambiental total relacionado a cada consumidor com a função `calcular_poluicao_total()` que retorna a soma de todos os produtos do dicionário `produtos_selecionados` multiplicados pelas suas quantidades. 
 
