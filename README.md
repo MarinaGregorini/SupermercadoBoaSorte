@@ -4,10 +4,10 @@
 Este é um projeto web desenvolvido com Flask que permite aos utilizadores selecionar produtos com base no seu impacto ambiental. O objetivo é promover escolhas mais sustentáveis ao fazer compras online.
 
 ## Funcionalidades
-- Login de utilizador
-- Escolha de produtos com recomendações
+- Identificação do utilizador
+- Escolha de produtos com recomendações dos que causam menor impacto ambiental
 - Cálculo do impacto ambiental dos produtos
-- Resumo da compra
+- Resumo dos produtos selecionados
 
 ## Tecnologias Utilizadas
 - Python (Flask)
@@ -17,7 +17,7 @@ Este é um projeto web desenvolvido com Flask que permite aos utilizadores selec
 
 ### 1. Clonar o Repositório
 ```bash
-git clone https://github.com/MarinaGregorini/SupermercadoBoaSorte
+git clone https://github.com/MarinaGregorini/SupermercadoBoaSorte.git
 cd SupermercadoBoaSorte
 ```
 
@@ -58,20 +58,43 @@ http://127.0.0.1:5000/
 ## Variáveis e Funções
 
 ### app.py
-- **Variáveis:**
-  - `app`: Instância do Flask
-  - `consumidor`: Objeto global do utilizador logado
 - **Funções:**
-  - `login()`: Processa o login do utilizador
-  - `escolher_produtos()`: Exibe os produtos e permite selecionar quantidades
-  - `resumo_compra()`: Mostra o impacto ambiental total da compra
+  - `login()`: Identifica o utilizador e instancia a classe consumidor
+  - `escolher_produtos()`: Lista os produtos, define o produto que tem o menor impacto ambiental, recebe a seleção do cliente e a quantidade de produtos selecionados
+  - `resumo_compra()`: Calcula o total da poluição gerada pelos produtos selecionados pelo cliente
 
 ### classes.py
 - **Classes:**
-  - `Transportadora`: Representa uma empresa de transporte
-  - `Produtor`: Representa um fornecedor de produtos
-  - `Produto`: Representa um produto com cálculo do impacto ambiental
-  - `Consumidor`: Guarda os produtos escolhidos e calcula o impacto total
+  - `Transportadora`: Define as empresas de transporte
+    Recebe os seguintes parâmetros:
+    - `nome`
+    - `co2_km` representa a emissão de co2 por km do veículo
+    - `eletrica` define se o veículo é elétrico
+
+  - `Produtor`: Representa os fornecedores de produtos
+    Recebe os seguintes parâmetros:
+    - `nome`
+    - `consumo_produto` define quantos kWh são gastos para produzir cada produto
+    - `consumo_diario` define os gastos em kWh que o produtor gasta por dia para manter os seus produtos armazenados
+    - `distancia_km` define a distância entre o produtor e o supermercado 
+    - `dias_armazenado` define quantos dias o produtor mantem os seus produtos armazenados antes de os enviar
+
+  - `Produto`: Representa um produto
+    Recebe os seguintes parâmetros:
+    - `nome`
+    - `produtor`
+    - `transportadora`
+  
+  O método `calcular_poluicao_producao()` calcula o impacto ambiental da produção através do somatório dos gastos energéticos do consumo diário do armazenamento multiplicados pelos dias armazenados com o gasto energético da produção do produto. 
+  Esta dimensão do impacto ambiental é então colocado num ranking que vai de 1 a 3, de acordo com o total de kWh.
+
+  O método `calcular_poluicao_transporte()` multiplica a distância em km pela emissão de co2 por km. 
+  Esta dimensão do impacto ambiental é também colocado num ranking, de 0 a 3, onde os veículos elétricos, que não emitem co2, são equivalentes a 0. Os restantes são dividos de acordo com o total de emissões de CO2.
+
+  - `Consumidor`: Define o consumidor e recebe o parâmetro `nome`.
+  Inicializa e popula o dicionário `produtos_selecionados` com a função `adicionar_produto(produto, quantidade)`.
+  Calcula o impacto ambiental total relacionado a cada consumidor com a função `calcular_poluicao_total()` que retorna a soma de todos os produtos do dicionário `produtos_selecionados` multiplicados pelas suas quantidades. 
+
 - **Variáveis Importantes:**
   - `transportadoras`: Lista de transportadoras disponíveis
   - `produtores`: Lista de produtores de produtos
