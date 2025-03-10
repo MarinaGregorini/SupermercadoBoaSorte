@@ -94,8 +94,8 @@ http://127.0.0.1:5000/
   - `Consumidor`: Define o consumidor.
     - Recebe o parâmetro `nome`.
       
- Inicializa e popula o dicionário `produtos_selecionados` com a função `adicionar_produto(produto, quantidade)`.
- Calcula o impacto ambiental total relacionado a cada consumidor com a função `calcular_poluicao_total()` que retorna a soma de todos os produtos do dicionário `produtos_selecionados` multiplicados pelas suas quantidades. 
+   Inicializa e popula o dicionário `produtos_selecionados` com a função `adicionar_produto(produto, quantidade)`.
+   Calcula o impacto ambiental total relacionado a cada consumidor com a função `calcular_poluicao_total()` que retorna a soma de todos os produtos do dicionário `produtos_selecionados` multiplicados pelas suas quantidades. 
 
 - **Variáveis Importantes:**
   - `transportadoras`: Lista de transportadoras disponíveis
