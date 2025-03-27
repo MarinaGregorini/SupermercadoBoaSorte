@@ -5,7 +5,7 @@
 <h2>Resumo da Compra</h2>
 <h4>Consumidor: {{ consumidor.nome }}</h4>
 <ul>
-    {% for produto, quantidade in consumidor.produtos_selecionados.items() %}
+    {% for produto, quantidade in produtos_selecionados %}
     <li>
         {{ produto.nome }} - Quantidade: {{ quantidade }} - Impacto Ambiental: {{ produto.custo_poluicao * quantidade }}
     </li>
@@ -24,7 +24,7 @@
                     <p>
                         Este produto usou <strong>{{ produto.produtor.consumo_produto }}kWh</strong> para ser produzido.
                         Ao ficar armazenado por <strong>{{ produto.produtor.dias_armazenado }} dias</strong>,
-                        gastou <strong>{{ produto.poluicao_producao }}kW</strong>.
+                        gastou <strong>{{ produto.calcular_poluicao_producao() }}kW</strong>.
                         <br>
                         Transportado por <strong>{{ produto.transportadora.nome }}</strong>
                         ({% if produto.transportadora.eletrica %}veículos elétricos{% else %}
@@ -56,8 +56,9 @@
                 <p>O impacto ambiental total é calculado somando o impacto de cada produto selecionado.</p>
                 <ul>
                     <li><strong>Impacto do Produto:</strong> Cada produto tem um custo ambiental baseado na produção e
-                        transporte. Este valor é colocado em um ranking com valores de 0 a 3, onde 0 equivale ao menor
-                        impacto causado.</li>
+                        transporte. Cada valor é colocado em um ranking de 0 a 3, onde 0 equivale ao menor
+                        impacto causado. Os valores dos dois rankings são então somados para obtermos o custo total do
+                        impacto ambiental.</li>
                     <li><strong>Quantidade:</strong> Se um produto for comprado mais vezes, o impacto será multiplicado
                         pela quantidade.</li>
                 </ul>
@@ -66,5 +67,6 @@
     </div>
 </div>
 
-<a href="{{ url_for('escolher_produtos') }}" class="btn btn-custom w-100">Voltar para Escolher Produtos</a>
+<a href="{{ url_for('escolher_produtos', consumidor_id=consumidor.id) }}" class="btn btn-custom w-100">Voltar para
+    Escolher Produtos</a>
 {% endblock %}

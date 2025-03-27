@@ -37,8 +37,9 @@
                             </p>
                             <div class="quantidade">
                                 <label for="quantidade">Quantidade:</label>
-                                <input type="number" id="quantidade_{{ produto.nome }}"
-                                    name="quantidade_{{ produto.nome }}" min="0" value="0" style="width: 80px;">
+                                <input type="number" id="quantidade_{{ produto.id }}" name="quantidade_{{ produto.id }}"
+                                    min="0" value="0" style="width: 80px;">
+
                             </div>
 
                         </div>
@@ -55,6 +56,8 @@
     <button type="submit" class="btn btn-custom w-100">Finalizar Escolha</button>
 </form>
 
-<a href="{{ url_for('resumo_compra') }}" class="btn btn-custom-link">Ir para o Resumo da Compra</a>
+<a href="{{ url_for('resumo_compra', consumidor_id=consumidor.id) }}" class="btn btn-custom-link">Ir para o Resumo da
+    Compra</a>
+
 <br><br><br>
 {% endblock %}
