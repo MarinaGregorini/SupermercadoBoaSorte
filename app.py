@@ -127,7 +127,7 @@ def get_produtos():
 
 # Consumidor escolhe produtos
 @app.route('/api/consumidores/<int:consumidor_id>/produtos/', methods=['POST'])
-def escolher_produtos(consumidor_id):
+def escolher_produtos_api(consumidor_id):
     consumidor = Consumidor.query.get_or_404(consumidor_id)
     data = request.get_json()
 
@@ -148,7 +148,7 @@ def escolher_produtos(consumidor_id):
 
 # Resumo da compra
 @app.route('/api/consumidores/<int:consumidor_id>/resumo/', methods=['GET'])
-def resumo_compra(consumidor_id):
+def resumo_compra_api(consumidor_id):
     consumidor = Consumidor.query.get_or_404(consumidor_id)
     total_poluicao = 0
     produtos_selecionados = []
